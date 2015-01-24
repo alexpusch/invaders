@@ -2,6 +2,10 @@
   "name": "invaders",
   "private": true,
   "dependencies": {
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "pixi": "~2.2.3",
+    "physicsjs": "~0.7.0",
+    "lodash": "~2.4.1",
+    "backbone": "latest"
   }
 }

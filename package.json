@@ -43,5 +43,10 @@
   "browserify": {
     "transform": [ "browserify-shim" ]
   },
-  "dependencies": {}
+  "browserify-shim": {
+    "backbone": "global:Backbone",
+    "pixi": "global:PIXI",
+    "_": "global:_",
+    "physicsjs": "global: Physics"
+  }
 }
