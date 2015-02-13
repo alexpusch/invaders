@@ -6,6 +6,7 @@
     "pixi": "~2.2.3",
     "physicsjs": "~0.7.0",
     "lodash": "~2.4.1",
-    "backbone": "latest"
+    "backbone": "latest",
+    "es6-promise": "latest"
   }
 }
