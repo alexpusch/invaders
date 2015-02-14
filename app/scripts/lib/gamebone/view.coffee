@@ -4,6 +4,7 @@ Events = require("backbone").Events
 module.exports = class View
   constructor: (options)->
     {@el} = options
+    @initialize? options
 
   render: ->
     @_ensureElement()

@@ -9,8 +9,10 @@ module.exports = class PhysicsModel extends Model
                     "state.angular.pos", "state.angular.vel", "state.angular.acc", 
                   ]
   constructor: ->
-    super
     @body = Physics.body @physicsBody, @physicsAttrs
+    super
+
+  update: ->
 
   get: (attr) ->
     if _(_.union(physicsInternals, stateInternals)).contains attr

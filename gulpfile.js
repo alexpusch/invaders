@@ -155,7 +155,7 @@ gulp.task('watch', ['connect'], function () {
   gulp.watch([
     'app/*.html',
     '.tmp/styles/**/*.css',
-    '.tmp/scripts/**/*.js',
+    '.tmp/scripts/bundle.js',
     'app/scripts/**/*.js',
     'app/images/**/*',
   ]).on('change', $.livereload.changed);

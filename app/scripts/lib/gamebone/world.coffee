@@ -10,8 +10,6 @@ module.exports = class World
 
   addCollection: (collection) ->
     collection.onForever (model) =>
-      console.log "world"
-      console.log model
       @collection.add model
       @world.addBody model.body
 
