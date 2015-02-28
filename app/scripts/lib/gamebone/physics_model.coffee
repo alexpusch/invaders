@@ -10,6 +10,7 @@ module.exports = class PhysicsModel extends Model
                   ]
   constructor: ->
     @body = Physics.body @physicsBody, @physicsAttrs
+    @body.model = this
     super
 
   update: ->

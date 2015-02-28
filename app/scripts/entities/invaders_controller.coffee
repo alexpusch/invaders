@@ -3,9 +3,10 @@
 module.exports = class InvadersController
   constructor: (options = {} ) ->
     { @worldAABB } = options
-    @invaders = new Invaders
 
   createInvaders: ->
+    invaders = @invaders = new Invaders
+
     minX = @worldAABB.x - @worldAABB.hw
     maxX = @worldAABB.x + @worldAABB.hw
     minY = @worldAABB.y - @worldAABB.hh
@@ -29,20 +30,25 @@ module.exports = class InvadersController
         invader.set "state.pos.x", x
         invader.set "state.pos.y", y
         invader.moveLeft()
+        # invader.moveDown()
+        invader.on "destroyed", ->
+          invaders.remove this
+
         @invaders.add invader
 
     @invaders
 
   update: ->
-    leftMostInvader = @getLeftmostInvader()
-    if leftMostInvader.get("state.pos.x") < @worldAABB.x - @worldAABB.hw
-      @invaders.each (invader) ->
-        invader.moveRight()
-    else
-      rightMostInvader = @getRightmostInvader()
-      if rightMostInvader.get("state.pos.x") > @worldAABB.x + @worldAABB.hw
+    if @invaders.length > 0
+      leftMostInvader = @getLeftmostInvader()
+      if leftMostInvader.get("state.pos.x") < @worldAABB.x - @worldAABB.hw
         @invaders.each (invader) ->
-          invader.moveLeft()
+          invader.moveRight()
+      else
+        rightMostInvader = @getRightmostInvader()
+        if rightMostInvader.get("state.pos.x") > @worldAABB.x + @worldAABB.hw
+          @invaders.each (invader) ->
+            invader.moveLeft()
 
   getLeftmostInvader: ->
     @invaders.min (invader) ->

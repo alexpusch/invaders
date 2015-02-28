@@ -13,6 +13,9 @@ class Bullet extends PhysicsModel
     x: 0
     y: 0
 
+  handleInvaderCollision: (invader) ->
+    @trigger "hitInvader", this, invader
+
 module.exports = 
   Bullet: Bullet
   Bullets: Bullets

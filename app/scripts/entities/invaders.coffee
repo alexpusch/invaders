@@ -27,6 +27,10 @@ class Invader extends PhysicsModel
   moveRight: ->
     @set "state.vel.x", @speed
 
+
+  hanldeBulletCollision: (bullet) ->
+    @trigger "destroyed"
+
 module.exports = 
   Invader: Invader
   Invaders: Invaders
