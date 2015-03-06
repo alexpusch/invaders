@@ -19,6 +19,7 @@ module.exports = class World
 
   update: ->
     @world.step(new Date().getTime())
+    @afterUpdate?()
     @collection.each (model) ->
       model.update?()
 

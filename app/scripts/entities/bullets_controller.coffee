@@ -3,7 +3,11 @@
 module.exports = class BulletsController
   constructor: (options) ->
     {@bullets, @width, @height, @n} = options
+    
     @bullets.on "hitInvader", (bullet) =>
+      @bullets.remove bullet
+
+    @bullets.on "exitWorld", (bullet) =>
       @bullets.remove bullet
 
   startSpawning: ->

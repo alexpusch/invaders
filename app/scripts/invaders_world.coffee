@@ -8,10 +8,6 @@ module.exports = class InvadersWorld extends World
 
     @world.add [ 
       Physics.behavior "body-impulse-response"
-      Physics.behavior "edge-collision-detection",
-        aabb: @bounds
-        restitution: 0.2
-        cof: 0.8
       Physics.behavior "interactive",
         el: @interactiveEl
         maxVel: 
@@ -42,8 +38,7 @@ module.exports = class InvadersWorld extends World
         bullet["handle#{invader.constructor.name}Collision"] invader
         invader.hanldeBulletCollision bullet
 
-
-  setBulletsCollection: (bullets) ->
+  setBulletsCollection: (@bullets) ->
     @addCollection bullets
 
     constantAcceleration = Physics.behavior "constant-acceleration"
@@ -54,6 +49,14 @@ module.exports = class InvadersWorld extends World
 
   setInvadersCollection: (invaders) ->
     @addCollection invaders
+
+  afterUpdate: ->
+    @bullets.each (bullet) =>
+      _.defer =>
+        bulletAABB = bullet.body.aabb()
+  
+        unless Physics.aabb.overlap bulletAABB, @bounds
+          bullet.handleWorldExit()
 
   _attachCollectionToBehavior: (collection, behavior) ->
     bodies = @_getBodiesOf collection
