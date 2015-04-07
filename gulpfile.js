@@ -7,6 +7,7 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 fs = require("fs")
 _ = require("lodash")
+var bowerResolve = require('bower-resolve');
 
 notify = function(err){
   notifier.notify({
@@ -17,6 +18,50 @@ notify = function(err){
   $.util.log(err); 
   this.emit("end") 
 }
+
+gulp.task('build-vendor', function () {
+
+  // this task will go through ./bower.json and
+  // uses bower-resolve to resolve its full path.
+  // the full path will then be added to the bundle using require()
+
+  var b = browserify({
+    // generate source maps in non-production environment
+    debug: true
+  });
+
+  var bowerManifest = require('./bower.json');
+  getBowerDependencies(bowerManifest).forEach(function(id){
+    resolvedPath = bowerResolve.fastReadSync(id);
+
+    if(id === "underscore")
+      return;
+
+    if(id === "lodash")
+      b.require(resolvedPath, {expose: "underscore"})
+
+    console.log("exposing: " + resolvedPath + "as " + id);
+    b.require(resolvedPath, {
+
+      // exposes the package id, so that we can require() from our code.
+      // for eg:
+      // require('./vendor/angular/angular.js', {expose: 'angular'}) enables require('angular');
+      // for more information: https://github.com/substack/node-browserify#brequirefile-opts
+      expose: id
+
+    });
+  });
+  
+  var stream = b.bundle().pipe(source('vendor.js'));
+
+  // pipe additional tasks here (for eg: minifying / uglifying, etc)
+  // remember to turn off name-mangling if needed when uglifying
+
+  stream.pipe(gulp.dest('.tmp/scripts'));
+
+  return stream;
+});
+
 
 gulp.task('coffeescript', function () {
   return gulp.src(['app/**/*.coffee', 'test/**/*.coffee'])
@@ -57,7 +102,7 @@ gulp.task('test', ['scripts'], function(){
     .pipe($.jasmine())
 });
 
-gulp.task('scripts', ['coffeescript', 'browserify', 'spec-browserify'])
+gulp.task('scripts', ['build-vendor', 'coffeescript', 'browserify', 'spec-browserify'])
 gulp.task('spec-scripts', ['coffeescript', 'spec-browserify'])
 
 gulp.task('styles', function () {
@@ -66,19 +111,11 @@ gulp.task('styles', function () {
     .pipe(gulp.dest('.tmp/styles'));
 });
 
-gulp.task('jshint', function () {
-  return gulp.src('app/scripts/**/*.js')
-    .pipe($.jshint())
-    .pipe($.jshint.reporter('jshint-stylish'))
-    .pipe($.jshint.reporter('fail'));
-});
-
 gulp.task('html', ['styles', 'scripts'], function () {
   var assets = $.useref.assets({searchPath: '{.tmp,app}'});
 
   return gulp.src('app/*.html')
     .pipe(assets)
-    .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.csso()))
     .pipe(assets.restore())
     .pipe($.useref())
@@ -139,15 +176,6 @@ gulp.task('serve', ['connect', 'watch'], function () {
   require('opn')('http://localhost:9000');
 });
 
-// inject bower components
-gulp.task('wiredep', function () {
-  var wiredep = require('wiredep').stream;
-
-  gulp.src('app/*.html')
-    .pipe(wiredep())
-    .pipe(gulp.dest('app'));
-});
-
 gulp.task('watch', ['connect'], function () {
   $.livereload.listen();
 
@@ -163,10 +191,9 @@ gulp.task('watch', ['connect'], function () {
   gulp.watch('app/styles/**/*.css', ['styles']);
   gulp.watch('app/scripts/**/*.coffee', ['scripts']);
   gulp.watch('test/spec/**/*.coffee', ['spec-scripts']);
-  gulp.watch('bower.json', ['wiredep']);
 });
 
-gulp.task('build', ['jshint', 'html', 'images', 'fonts', 'extras'], function () {
+gulp.task('build', ['html', 'images', 'fonts', 'extras'], function () {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 
@@ -174,3 +201,19 @@ gulp.task('default', ['clean'], function () {
   gulp.start('build');
 });
 
+function getBowerDependencies(bowerManifest){
+  var dependencies = _.keys(bowerManifest.dependencies) || [];
+
+  return dependencies.reduce(function(prevValue, curValue){
+    console.log(curValue);
+    // var resolvedPath = bowerResolve.fastReadSync(curValue);
+    var depManifestPath = "./bower_components/" + curValue + "/" + "bower.json";
+    var depManifest = require(depManifestPath);
+    var depDep = getBowerDependencies(depManifest);
+
+    prevValue = prevValue.concat(depDep);
+    prevValue.push(curValue);
+
+    return prevValue
+  }, [])
+}

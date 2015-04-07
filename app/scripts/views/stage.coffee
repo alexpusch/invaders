@@ -1,5 +1,7 @@
 PIXI = require 'pixi'
 Events = require('backbone').Events
+_ = require("lodash");
+Backbone = require("backbone")
 
 class Stage
   constructor: (@options)->
@@ -41,7 +43,7 @@ class Stage
       unless @paused
         @trigger "frame"
         @render()
-        requestAnimFrame mainLoop
+        requestAnimationFrame mainLoop
 
     mainLoop()
 

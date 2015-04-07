@@ -1,4 +1,5 @@
 ModelView = require "../lib/gamebone/model_view"
+PIXI = require "pixi"
 
 module.exports = class BulletView extends ModelView
   create: ->

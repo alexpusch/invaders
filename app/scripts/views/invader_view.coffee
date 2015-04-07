@@ -1,5 +1,6 @@
 ModelView = require "../lib/gamebone/model_view"
 CollectionView = require "../lib/gamebone/collection_view"
+PIXI = require "pixi"
 
 class InvaderView extends ModelView
   create: ->

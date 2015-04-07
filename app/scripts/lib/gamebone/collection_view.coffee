@@ -1,4 +1,5 @@
 View = require "./view"
+_ = require "lodash"
 
 module.exports = class CollectionView extends View
   # modelView: 
@@ -28,7 +29,7 @@ module.exports = class CollectionView extends View
     @el.addChild modelView.render()
 
   _removeModelView: (model) ->
-    @el.removeChild @childViews[model.cid]
+    @el.removeChild @childViews[model.cid].el
     delete @childViews[model.cid]
 
   _createModelView: (model) ->

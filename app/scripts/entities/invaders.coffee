@@ -1,5 +1,6 @@
 Collection = require '../lib/gamebone/collection'
 PhysicsModel = require '../lib/gamebone/physics_model'
+_ = require "lodash"
 
 class Invaders extends Collection
   initialize: (models) ->
@@ -27,6 +28,8 @@ class Invader extends PhysicsModel
   moveRight: ->
     @set "state.vel.x", @speed
 
+  moveDown: ->
+    @set "state.vel.y", @speed/6
 
   hanldeBulletCollision: (bullet) ->
     @trigger "destroyed"

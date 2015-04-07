@@ -36,17 +36,17 @@
     "serve-static": "^1.4.0",
     "vinyl-source-stream": "^1.0.0",
     "wiredep": "^2.0.0",
-    "browserify-shim": "^3.8.2"
+    "browserify-shim": "^3.8.2",
+    "bower-resolve": "^2.2.1"
   },
   "dependencies": {
-  }, 
+  },
   "browserify": {
-    "transform": [ "browserify-shim" ]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "browserify-shim": {
-    "backbone": "global:Backbone",
-    "pixi": "global:PIXI",
-    "_": "global:_",
-    "physicsjs": "global: Physics"
+    
   }
 }

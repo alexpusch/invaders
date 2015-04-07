@@ -1,5 +1,5 @@
 PIXI = require 'pixi'
-require('./../../../bower_components/es6-promise/promise').polyfill()
+require('es6-promise').polyfill()
 
 module.exports = class AssetPreloader
   @loadAudioAssets: (assetes) ->

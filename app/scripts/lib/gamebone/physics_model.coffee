@@ -1,5 +1,6 @@
 Model = require './model'
 Physics = require 'physicsjs'
+_ = require "lodash"
 
 module.exports = class PhysicsModel extends Model
   physicsInternals = ["cof", "hidden", "mass", "offset", "restitution", "treatment", "uid"]

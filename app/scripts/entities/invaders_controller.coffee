@@ -1,4 +1,5 @@
 { Invader, Invaders } = require "./invaders"
+_ = require "lodash"
 
 module.exports = class InvadersController
   constructor: (options = {} ) ->

@@ -1,5 +1,6 @@
 PIXI = require "pixi"
 Events = require("backbone").Events
+_ = require "lodash"
 
 module.exports = class View
   constructor: (options)->

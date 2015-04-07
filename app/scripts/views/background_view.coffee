@@ -1,4 +1,5 @@
 View = require "../lib/gamebone/view"
+PIXI = require "pixi"
 
 module.exports = class BackgroundView extends View
   cityImagePath = "images/city.png"

@@ -1,4 +1,5 @@
 {Bullet, Bullets} = require "./bullet"
+_ = require "lodash"
 
 module.exports = class BulletsController
   constructor: (options) ->

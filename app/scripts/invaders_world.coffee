@@ -1,6 +1,8 @@
 World = require "./lib/gamebone/world"
 Bullet = require("./entities/bullet").Bullet
 Invader = require("./entities/invaders").Invader
+Physics = require "physicsjs"
+_ = require "lodash"
 
 module.exports = class InvadersWorld extends World
   initialize: ->
